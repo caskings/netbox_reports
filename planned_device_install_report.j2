@@ -2,22 +2,22 @@
 
 ## Devices to be installed
 
-{# sort into racks and then desecending RU #}
-| Rack | RU | Device | Model | Serial | Asset Tag |
-|------|----|--------|-------|--------|-----------|
+| Rack | RU | Facing | Device | Model | Serial | Asset Tag |
+|------|----|--------|--------|-------|--------|-----------|
+{#- sort into racks and then descending RU -#}
 {%- for device in queryset.order_by("rack").order_by("-position") %}
-| {{ device.rack }} | {{ device.position }} | {{ device.name }} | {{ device.device_type.model }} | {{ device.serial }} | {{ device.asset_tag }} |
+| {{ device.rack }} | {{ device.position }} | {{ device.face }} | {{ device.name }} | {{ device.device_type.model }} | {{ device.serial }} | {{ device.asset_tag }} |
 {%- endfor %}
 
 ## Items to be installed into devices
 
-{# sort into racks and then desecending RU. Loop through all invetory items associated with the device. #}
 | Rack | RU | Device | Item | Serial | Location |
 |------|----|--------|------|--------|----------|
+{#- sort into racks and then desecending RU. Loop through all invetory items associated with the device. -#}
 {%- for device in queryset.order_by("rack").order_by("-position")  -%}
 {%- for item in device.inventoryitems.all() %}
 | {{ device.rack }} | {{ device.position }} | {{ device.name }} | {{ item.name }} | {{ item.serial }} | {{ item.component.name }} |
-{%- endfor %}
+{%- endfor -%}
 {%- endfor %}
 
 ## Post Install Notes
