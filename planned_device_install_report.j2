@@ -1,0 +1,25 @@
+# Planned Device Install Report
+
+## Devices to be installed
+
+{# sort into racks and then desecending RU #}
+| Rack | RU | Device | Model | Serial | Asset Tag |
+|------|----|--------|-------|--------|-----------|
+{%- for device in queryset.order_by("rack").order_by("-position") %}
+| {{ device.rack }} | {{ device.position }} | {{ device.name }} | {{ device.device_type.model }} | {{ device.serial }} | {{ device.asset_tag }} |
+{%- endfor %}
+
+## Items to be installed into devices
+
+{# sort into racks and then desecending RU. Loop through all invetory items associated with the device. #}
+| Rack | RU | Device | Item | Serial | Location |
+|------|----|--------|------|--------|----------|
+{%- for device in queryset.order_by("rack").order_by("-position")  -%}
+{%- for item in device.inventoryitems.all() %}
+| {{ device.rack }} | {{ device.position }} | {{ device.name }} | {{ item.name }} | {{ item.serial }} | {{ item.component.name }} |
+{%- endfor %}
+{%- endfor %}
+
+## Post Install Notes
+
+Update devices in netbox as active.
