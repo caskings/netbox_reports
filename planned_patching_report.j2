@@ -1,0 +1,16 @@
+## Patch list
+
+| type | length | A end RU | A end device | A end port | B end RU | B end device | B end port |
+|------|--------|----------|--------------|------------|----------|--------------|------------|
+{%- for cable in queryset -%}
+    {# Ignore if an end is a circuit #}
+    {%- set a_end_term = cable.a_terminations[0].cable_terminations.content_type -%}
+    {%- set b_end_term = cable.b_terminations[0].cable_terminations.content_type -%}
+    {%- if a_end_term.app_label != 'circuits' and b_end_term.app_label != 'circuits' -%}
+    {# Display only planned cables #}
+    {%- if cable.status == 'planned' %}
+| {{ cable.type }} | {{ cable.length|default('', True) }}{{ cable.length_unit}} | {{ cable.a_terminations[0].device.position }} | {{ cable.a_terminations[0].device.name }} | {{ cable.a_terminations[0].name }} | {{ cable.b_terminations[0].device.position }} | {{ cable.b_terminations[0].device.name }} | {{ cable.b_terminations[0].name }} |
+    {%- endif -%}
+    {%- endif -%}
+
+{% endfor %}
